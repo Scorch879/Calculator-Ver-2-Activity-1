@@ -72,7 +72,6 @@ namespace Calculator_Ver_2_Activity_1
             }
             catch (DivideByZeroException)
             {
-
                 txtDisplay.Text = "undefined";
             }
             catch (Exception)
@@ -94,7 +93,6 @@ namespace Calculator_Ver_2_Activity_1
             {
 
                 string lastNumber = currentText.Split(new char[] { '+', '-', '*', '/' }, StringSplitOptions.None).Last();
-
 
                 if (!lastNumber.Contains("."))
                 {
@@ -119,38 +117,7 @@ namespace Calculator_Ver_2_Activity_1
 
         private void ToggleSignButton_Click(object sender, EventArgs e)
         {
-            // Get the current text in the display
-            string currentText = txtDisplay.Text;
-
-            // If the display is empty or just "0", do nothing
-            if (string.IsNullOrEmpty(currentText) || currentText == "0")
-            {
-                return;
-            }
-
-            // Check if the last character is an operator or the display ends with a negative sign
-            if ("+-*/".Contains(currentText[^1].ToString()))
-            {
-                return; // Do nothing if the display ends with an operator (we only want to toggle the number)
-            }
-
-            // Split the current text at the last operator (if any) to isolate the last number
-            string[] parts = currentText.Split(new char[] { '+', '-', '*', '/' }, StringSplitOptions.None);
-
-            // The last number (last part after the last operator)
-            string lastNumber = parts.Last();
-
-            // Toggle the sign of the last number
-            if (lastNumber.StartsWith("-"))
-            {
-                // If the number starts with "-", remove it to make it positive
-                txtDisplay.Text = currentText.Remove(currentText.Length - lastNumber.Length) + lastNumber.Substring(1);
-            }
-            else
-            {
-                // If the number is positive, add "-" to make it negative
-                txtDisplay.Text = currentText.Remove(currentText.Length - lastNumber.Length) + "-" + lastNumber;
-            }
+            
         }
 
         private void ClearButton_Click(object sender, EventArgs e)
