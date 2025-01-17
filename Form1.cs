@@ -1,14 +1,17 @@
 using System;
 using System.Data; // For evaluating expressions
+using System.Linq.Expressions;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Calculator_Ver_2_Activity_1
 {
-    public partial class Form1 : Form
+    public partial class SimpleCalculator : Form
     {
         private bool isDotUsed = false;
 
-        public Form1()
+        public SimpleCalculator()
         {
             InitializeComponent();
 
@@ -45,6 +48,7 @@ namespace Calculator_Ver_2_Activity_1
         private void Button_Click(object sender, EventArgs e)
         {
             Button clicked = sender as Button;
+            string currentText = txtDisplay.Text.Trim();
 
             if (txtDisplay.Text == "0" && clicked.Text != "." && clicked.Text != "-" || txtDisplay.Text == "undefined" || txtDisplay.Text == "Error")
             {
@@ -54,12 +58,26 @@ namespace Calculator_Ver_2_Activity_1
             {
                 txtDisplay.Text = "-";
             }
+            else if ("+-*/".Contains(clicked.Text))
+            {
+                // Handle operator input
+
+                // Prevent consecutive operators
+                if (currentText.Length > 0 && "+-*/".Contains(currentText.Last()))
+                {
+                    txtDisplay.Text = currentText.Remove(currentText.Length - 1) + clicked.Text;
+                }
+                else
+                {
+                    txtDisplay.Text += clicked.Text;
+                }
+            }
             else
             {
                 txtDisplay.Text += clicked.Text;
             }
-         }
-        
+        }
+
         private void EqualsButton_Click(object sender, EventArgs e)
         {
             try
@@ -117,7 +135,49 @@ namespace Calculator_Ver_2_Activity_1
 
         private void ToggleSignButton_Click(object sender, EventArgs e)
         {
-            
+            if (!string.IsNullOrEmpty(txtDisplay.Text) && txtDisplay.Text != "0")
+            {
+                string currentText = txtDisplay.Text;
+                string[] parts = currentText.Split(new char[] { '+', '-', '*', '/' }, StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length > 0)
+                {
+                    if (parts.Length == 1)
+                    {
+                        if (currentText.StartsWith("-"))
+                        {
+                            currentText = currentText.Substring(1);
+                        }
+                        else
+                        {
+                            currentText = "-" + currentText;
+                        }
+                    }
+                    else
+                    {
+                        string lastPart = parts.Last();
+                        if (!string.IsNullOrEmpty(lastPart))
+                        {
+                            int lastIndex = currentText.LastIndexOf(lastPart);
+                            if (lastIndex > 0 && currentText[lastIndex - 1] == '-')
+                            {
+                                currentText = currentText.Substring(0, lastIndex - 1) + "+" + lastPart;
+                            }
+                            else if (lastIndex > 0 && currentText[lastIndex - 1] == '+')
+                            {
+                                currentText = currentText.Substring(0, lastIndex - 1) + "-" + lastPart;
+                            }
+
+                            else
+                            {
+                                currentText = currentText.Substring(0, lastIndex) + "-" + lastPart;
+                            }
+                        }
+
+
+                    }
+                }
+                txtDisplay.Text = currentText;
+            }
         }
 
         private void ClearButton_Click(object sender, EventArgs e)
@@ -129,6 +189,11 @@ namespace Calculator_Ver_2_Activity_1
         {
             DataTable dataTable = new DataTable();
             return Convert.ToDouble(dataTable.Compute(text, string.Empty));
+        }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
