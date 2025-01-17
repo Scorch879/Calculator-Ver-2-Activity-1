@@ -9,8 +9,6 @@ namespace Calculator_Ver_2_Activity_1
 {
     public partial class SimpleCalculator : Form
     {
-        private bool isDotUsed = false;
-
         public SimpleCalculator()
         {
             InitializeComponent();
@@ -26,13 +24,13 @@ namespace Calculator_Ver_2_Activity_1
             button9.Click += new EventHandler(Button_Click);
             button0.Click += new EventHandler(Button_Click);
 
-            // Operator buttons (+, -, *, /)s
+            // Operator buttons 
             btnAdd.Click += new EventHandler(Button_Click);
             btnSubtract.Click += new EventHandler(Button_Click);
             btnMultiply.Click += new EventHandler(Button_Click);
             btnDivide.Click += new EventHandler(Button_Click);
 
-            // Special buttons (equals, dot, backspace)
+            // Special buttons 
             btnEquals.Click += new EventHandler(EqualsButton_Click);
             btnDot.Click += new EventHandler(DotButton_Click);
             btnBackspace.Click += new EventHandler(Delete_Click);
@@ -60,9 +58,6 @@ namespace Calculator_Ver_2_Activity_1
             }
             else if ("+-*/".Contains(clicked.Text))
             {
-                // Handle operator input
-
-                // Prevent consecutive operators
                 if (currentText.Length > 0 && "+-*/".Contains(currentText.Last()))
                 {
                     txtDisplay.Text = currentText.Remove(currentText.Length - 1) + clicked.Text;
@@ -189,11 +184,6 @@ namespace Calculator_Ver_2_Activity_1
         {
             DataTable dataTable = new DataTable();
             return Convert.ToDouble(dataTable.Compute(text, string.Empty));
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
